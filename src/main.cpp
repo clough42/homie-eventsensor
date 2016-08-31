@@ -19,7 +19,7 @@ ADC_MODE(ADC_VCC);
 #define PROPERTY_TRIGGERED "triggered"
 
 bool reported = false;
-bool disconnecting = false;
+bool sleepRequested = false;
 
 HomieNode batteryNode("battery2xAA", "voltage");
 HomieNode eventNode("event", "event");
@@ -42,9 +42,9 @@ void loopHandler()
     Homie.setNodeProperty(eventNode, PROPERTY_TRIGGERED).send("1");
     reported = true;
   } else {
-    if( ! disconnecting ) {
-      disconnecting = true;
-      Homie.disconnect();
+    if( ! sleepRequested ) {
+      sleepRequested = true;
+      Homie.prepareForSleep();
     }
   }
 }
@@ -54,7 +54,7 @@ void loopHandler()
  */
 void eventHandler(HomieEvent event)
 {
-  if( event == HomieEvent::DISCONNECTED ) {
+  if( event == HomieEvent::READY_FOR_SLEEP ) {
     Serial.println("Going to sleep...");
     ESP.deepSleep(0);
   }
