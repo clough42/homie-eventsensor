@@ -1,0 +1,22 @@
+{
+  "name": "Test Device",
+  "device_id": "test",
+  "wifi": {
+    "ssid": "ssid",
+    "password": "password"
+  },
+  "mqtt": {
+    "host": "mqtt",
+    "port": 1883,
+    "base_topic": "devices/",
+    "auth": false,
+    "username": "",
+    "password": ""
+  },
+  "ota": {
+    "enabled": false
+  },
+  "settings": {
+    "voltage_coefficient": 0.0010379
+  }
+}

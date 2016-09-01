@@ -13,7 +13,6 @@
 
 // ESP-01
 ADC_MODE(ADC_VCC);
-#define VOLTAGE_COEFFICIENT 0.0010347
 
 #define PROPERTY_VOLTAGE "voltage"
 #define PROPERTY_TRIGGERED "triggered"
@@ -23,6 +22,8 @@ bool sleepRequested = false;
 
 HomieNode batteryNode("battery2xAA", "voltage");
 HomieNode eventNode("dump", "event");
+
+HomieSetting<double> voltageCoefficientSetting("voltage_coefficient", "ADC scaling factor for battery voltage");
 
 /*
  * Called once when Homie is ready to operate
@@ -38,7 +39,7 @@ void setupHandler()
 void loopHandler()
 {
   if( ! reported ) {
-    Homie.setNodeProperty(batteryNode, PROPERTY_VOLTAGE).send(String(VOLTAGE_COEFFICIENT * ESP.getVcc()));
+    Homie.setNodeProperty(batteryNode, PROPERTY_VOLTAGE).send(String(voltageCoefficientSetting.get() * ESP.getVcc()));
     Homie.setNodeProperty(eventNode, PROPERTY_TRIGGERED).send("true");
     reported = true;
   } else {
