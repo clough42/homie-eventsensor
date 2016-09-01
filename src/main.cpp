@@ -22,7 +22,7 @@ bool reported = false;
 bool sleepRequested = false;
 
 HomieNode batteryNode("battery2xAA", "voltage");
-HomieNode eventNode("event", "event");
+HomieNode eventNode("dump", "event");
 
 /*
  * Called once when Homie is ready to operate
@@ -39,7 +39,7 @@ void loopHandler()
 {
   if( ! reported ) {
     Homie.setNodeProperty(batteryNode, PROPERTY_VOLTAGE).send(String(VOLTAGE_COEFFICIENT * ESP.getVcc()));
-    Homie.setNodeProperty(eventNode, PROPERTY_TRIGGERED).send("1");
+    Homie.setNodeProperty(eventNode, PROPERTY_TRIGGERED).send("true");
     reported = true;
   } else {
     if( ! sleepRequested ) {
@@ -62,7 +62,7 @@ void eventHandler(HomieEvent event)
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   Homie_setFirmware("eventsensor", "1.0.0");
   Homie_setBrand("clough42");
